@@ -1,0 +1,3 @@
+<a href="https://www.freepik.com/free-vector/african-savannah-landscape-wild-nature-africa_21376678.htm#query=prehistoric%20landscape&position=3&from_view=search&track=ais">Image by upklyak</a> on Freepik
+
+<a href="https://www.freepik.com/free-vector/arctic-landscape-with-snow-mountains-ice_21266891.htm#query=arctic%20background&position=3&from_view=search&track=ais">Image by upklyak</a> on Freepik
