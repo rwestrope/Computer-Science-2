@@ -10,11 +10,13 @@ def list_to_string(num_list, str_list):
         str_list.append(str(item))
     return str_list
 
+
 def list_to_num(num_list, str_list):
     #num_list = []
     for item in str_list:
         num_list.append(item)
     return num_list
+
 
 class Dice:
     def __init__(self):
@@ -47,16 +49,12 @@ class Cup:
     def roll(self):
         roll_result = []
         for die in self.cup:
-            roll_result.append(str(die.roll()))
+            roll_result.append(die.roll())
         return roll_result
 
-    def get_roll_str(self, roll):
-        roll_str = []
-        for die in roll():
-            roll_str.append(str(die))
-        return roll_str
+    def get_dice_count(self, roll):    
+        global count
 
-    def score_check(self, roll):    
         count = [0, 0, 0, 0, 0, 0]
         for die in roll:
             if (die == 1):
@@ -71,9 +69,27 @@ class Cup:
                 count[4] += 1
             elif (die == 6):
                 count[5] += 1
-        string_count = []
-        list_to_string(count, string_count)
-        print(string_count)
+        return count
+        
+    def score_check(self, count):
+        
+        farkle = False
+
+        #check for ones
+        if count[0] <= 2 and count[0] != 0:
+            print(f"You can take the {str(count[0])} 1's for {str(count[0]*100)} points.")
+
+        #check for fives
+        if count[4] <= 2 and count[4] != 0:
+            print(f"You can take the {str(count[4])} fives for {str(count[4]*50)} points.")
+
+        #check for straight
+        if count == [1, 1, 1, 1, 1, 1]:
+            print(f"You can take all the dice for 3000 points.")
+        
+
+
+
 
 
 
@@ -90,19 +106,32 @@ class Player:
 
     def get_name(self):
         return self.name
-    
+
+
+
     def turn(self):
         print(f"{self.name}, it is your turn")
         print(f"Your score is {self.score}")
         decision = input("Would you like to roll or pass?")
         if decision == "roll":
+            #printing the dice for this turn's roll
             print("You rolled the following numbers:")
-            turn_roll = game_cup.get_roll_str(game_cup.roll)
-            int_turn_roll = []
-            int_turn_roll = list_to_num(int_turn_roll, turn_roll)
-            for die in turn_roll:
+            turn_roll = game_cup.roll()
+            str_turn_roll = []
+            str_turn_roll = list_to_string(turn_roll, str_turn_roll)
+            for die in str_turn_roll:
                 print(die)
-            print(game_cup.score_check(int_turn_roll))
+
+            #checking how many of each dice there are in the roll
+            dice_count = game_cup.get_dice_count(turn_roll)
+            str_dice_count = []
+            str_dice_count = list_to_string(dice_count, str_dice_count)
+            print(str_dice_count)
+
+            #checking for combinations of dice that can score
+            game_cup.score_check(dice_count)
+            
+            
 
 
 
@@ -115,9 +144,6 @@ def start_game():
         name = input(f"What is player {num}'s name?\n:")
         player = Player(num, name)
         player_list.append(player)
-    for player in player_list:
-        print(player.get_name())
-        print(player.get_score_as_str())
 
     while play:
         for player in player_list:
@@ -125,16 +151,6 @@ def start_game():
 
     
 
-
-
-
-
-
-    
-
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     start_game()
