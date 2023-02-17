@@ -10,6 +10,14 @@ def list_to_string(num_list, str_list):
         str_list.append(str(item))
     return str_list
 
+
+def list_to_num(num_list, str_list):
+    #num_list = []
+    for item in str_list:
+        num_list.append(item)
+    return num_list
+
+
 class Dice:
     def __init__(self):
         self.faces = [1, 2, 3, 4, 5, 6]
@@ -46,6 +54,7 @@ class Cup:
 
     def get_dice_count(self, roll):    
         global count
+
         count = [0, 0, 0, 0, 0, 0]
         for die in roll:
             if (die == 1):
@@ -84,6 +93,7 @@ class Cup:
 
 
 
+
 game_cup = Cup()
 class Player:
     def __init__(self, number, name):
@@ -96,6 +106,8 @@ class Player:
 
     def get_name(self):
         return self.name
+
+
 
     def turn(self):
         print(f"{self.name}, it is your turn")
@@ -123,6 +135,7 @@ class Player:
 
 
 
+
 def start_game():
     play = True
     num_of_players = int(input("How many players are playing today?\n:"))
@@ -137,5 +150,7 @@ def start_game():
             player.turn()
 
     
+
 if __name__ == "__main__":
+
     start_game()
