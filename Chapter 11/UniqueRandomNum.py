@@ -16,17 +16,18 @@ def unique_random_ints(how_many, max_num, seed):
             retries += 1
         else:
             num_list.append(new_num)
-        
-    print(num_list)
-    print(retries)
-    # Type your code here. #
+
+    print("The unique numbers were:")
+    for num in num_list:  
+        print(num)
+    print(f"There were {retries} repeating numbers generated.")
 
 
 if __name__ == '__main__':
-    seed = int(input("seed:"))
-    how_many = int(input("how many:"))
-    max_num = int(input("max number:"))
+    seed = int(input("Enter a seed.\n:"))
+    how_many = int(input("How many numbers do you want to generate?\n:"))
+    max_num = int(input("What is the max number that should be generated?\n:"))
 
 
     unique_random_ints(how_many, max_num, seed)
-    # Type your code here. #
+    
