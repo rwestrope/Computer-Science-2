@@ -1,13 +1,13 @@
-Acadia2003_photo.jpg
-AmericanSamoa1989_photo.jpg
-BlackCanyonoftheGunnison1983_photo.jpg
-CarlsbadCaverns2010_photo.jpg
-CraterLake1996_photo.jpg
-GrandCanyon1996_photo.jpg
-IndianaDunes1987_photo.jpg
-LakeClark2009_photo.jpg
-Redwood1980_photo.jpg
-VirginIslands2007_photo.jpg
-Voyageurs2006_photo.jpg
-WrangellStElias1987_photo.jpg
+Acadia2003_info.txt
+AmericanSamoa1989_info.txt
+BlackCanyonoftheGunnison1983_info.txt
+CarlsbadCaverns2010_info.txt
+CraterLake1996_info.txt
+GrandCanyon1996_info.txt
+IndianaDunes1987_info.txt
+LakeClark2009_info.txt
+Redwood1980_info.txt
+VirginIslands2007_info.txt
+Voyageurs2006_info.txt
+WrangellStElias1987_info.txt
 
