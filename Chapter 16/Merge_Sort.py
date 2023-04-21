@@ -24,7 +24,7 @@ def merge(numbers, i, j, k):
     right_pos = j + 1                     
 
     while left_pos <= j and right_pos <= k:
-        #comparisons += 1
+        comparisons += 1
         if numbers[left_pos] < numbers[right_pos]:
             merged_numbers[merge_pos] = numbers[left_pos]
             left_pos = left_pos + 1
