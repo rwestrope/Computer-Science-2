@@ -7,23 +7,23 @@ comparisons = 0
 def binary_search(nums, target, lower, upper):
     global comparisons, recursions
 
+    recursions += 1
+    comparisons += 1    
     if upper >= lower:
-        #comparisons += 1
         #recursions += 1
         mid = ((upper + lower) // 2)
-
-        if nums[mid] == target:
-            comparisons += 1
+        comparisons += 1
+        if nums[mid] == target:              
             return mid
-
-        elif nums[mid] > target:
-            comparisons += 1
-            recursions += 1
+                
+        elif nums[mid] > target:  
+            comparisons += 1      
+            #recursions += 1
             return binary_search(nums, target, lower, mid - 1)
         
-        elif nums[mid] < target:
-            comparisons += 1
-            recursions += 1
+        elif nums[mid] < target: 
+            comparisons += 1   
+            #recursions += 1
             return binary_search(nums, target, mid + 1, upper)
         
     else:
