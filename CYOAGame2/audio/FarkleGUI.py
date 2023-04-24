@@ -31,10 +31,18 @@ rolling_stop_aud = pygame.mixer.Sound('audio/roll_stop_aud.mp3')
 is_rolling = False
 rolling_images_counter = 0
 dice_num_image = dice_images[0]
+
 first_sound = True
 
 
 while True:
+
+    die1 = Dice(20, 150)
+    die2 = Dice(250, 150)
+    die3 = Dice(450, 150)
+
+    dice_list = [die1, die2, die3]
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -42,15 +50,18 @@ while True:
     screen.blit(background_image, (0, 0))
     screen.blit(roll_message, (50, 300))
 
+
     key = pygame.key.get_pressed()
     if key[pygame.K_SPACE] and is_rolling is False:
         is_rolling = True
         rolling_aud.play()
+
         rand_num = random.randint(0, 5)
         dice_num_image = dice_images[rand_num]
         screen.blit(dice_rolling_images[rolling_images_counter], (250, 150))
         rolling_images_counter += 1
         first_sound = True
+
 
         # start rolling and calculate dice num
     else:
@@ -62,6 +73,7 @@ while True:
                 is_rolling = False
                 rolling_images_counter = 0
 
+
         else:
             screen.blit(dice_num_image, (250, 150))
             if first_sound:
@@ -71,3 +83,4 @@ while True:
 
     pygame.display.update()
     clock.tick(13)
+
