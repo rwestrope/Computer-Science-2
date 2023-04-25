@@ -5,7 +5,9 @@ import random
 pygame.init()
 clock = pygame.time.Clock()
 
-screen = pygame.display.set_mode((700, 500))
+screen_width = 500
+screen_height = 700
+screen = pygame.display.set_mode((screen_height, screen_width))
 pygame.display.set_caption("Dice Roll Stimulator")
 
 background_image = pygame.image.load('graphics/background2.png')
@@ -36,7 +38,6 @@ class Dice:
         self.y = y
         self.animate = True
         
-
     def roll(self):
         result = random.choice(self.faces)
         return result
@@ -82,17 +83,61 @@ class Dice:
 
 class Button():
 
-    def __init__(self, text, x, y, color, action):
-        self.text = text
-        self.x = x
-        self.y = y
+    def __init__(self, x, y, width, height, text='', color=(0, 255, 0), highlight_color=(255, 0, 0), function=None, param=None):
+        self.rect = pygame.Rect(x, y, width, height)
         self.color = color
-        self.action = action
+        self.highlight_color = highlight_color
+        self.text = text
+        self.function = function
+        self.highlighted = False
+        self.parameter = param
+        
+    def draw(self, surface):
+        if self.highlighted:
+            pygame.draw.rect(surface, self.highlight_color, self.rect)
+        else:
+            pygame.draw.rect(surface, self.color, self.rect)
+        
+        font = pygame.font.Font('font/SunnyspellsRegular.otf', 50)
+        text = font.render(self.text, True, (255, 255, 255))
+        text_rect = text.get_rect(center=self.rect.center)
+        surface.blit(text, text_rect)
+        
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos):
+                if self.function:
+                    if self.parameter is not None:
+                        self.function(self.parameter)
+                    else:
+                        self.function()
+                
+        if event.type == pygame.MOUSEMOTION:
+            if self.rect.collidepoint(event.pos):
+                self.highlighted = True
+            else:
+                self.highlighted = False
 
-    def create_button(self):
-        print("inside the button function")
+'''def rolling_animation_space(dice_list):
+    key = pygame.key.get_pressed()
+    if key[pygame.K_SPACE]:
+        rolling_aud.play()
+        for die in dice_list:
+            die.is_rolling = True
+            die_roll_index = die.roll() - 1#random.randint(0, 5)
+            die.dice_num_image = die.dice_images[die_roll_index]'''
+
+def rolling_animation_button(dice_list):
+    rolling_aud.play()
+    for die in dice_list:
+        die.is_rolling = True
+        die_roll_index = die.roll() - 1#random.randint(0, 5)
+        die.dice_num_image = die.dice_images[die_roll_index]
 
 if __name__ == "__main__":
+
+
+    
 
     die1 = Dice(70, 135)
     die2 = Dice(285, 135)
@@ -103,21 +148,19 @@ if __name__ == "__main__":
 
     dice_list = [die1, die2, die3, die4, die5, die6]
 
+    button_width = 100
+    button_height = 50
+    button_x = 70
+    button_y = 40
+    roll_button = Button(button_x, button_y, button_width, button_height, text='Roll', function=rolling_animation_button, param=dice_list)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-        
-
-        key = pygame.key.get_pressed()
-        if key[pygame.K_SPACE]:
-            rolling_aud.play()
-            for die in dice_list:
-                die.is_rolling = True
-                die_roll_index = die.roll() - 1#random.randint(0, 5)
-                die.dice_num_image = die.dice_images[die_roll_index]
+            else:
+                roll_button.handle_event(event)
 
         screen.blit(background_image, (0, 0))
         screen.blit(roll_message, (100, 425))
@@ -125,6 +168,7 @@ if __name__ == "__main__":
         for die in dice_list:
             die.roll_animation(screen)
 
+        roll_button.draw(screen)
 
         pygame.display.update()
         clock.tick(13)
