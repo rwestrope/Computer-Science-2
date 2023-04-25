@@ -8,11 +8,13 @@ clock = pygame.time.Clock()
 screen_width = 500
 screen_height = 700
 screen = pygame.display.set_mode((screen_height, screen_width))
-pygame.display.set_caption("Dice Roll Stimulator")
+pygame.display.set_caption("Dice Roll Simulator")
 
 background_image = pygame.image.load('graphics/background2.png')
 font = pygame.font.Font('font/SunnyspellsRegular.otf', 50)
-roll_message = font.render("press SPACEBAR to start rolling", True, (255, 235, 193))
+
+player_name = font.render("Player:", True, (255, 235, 193))
+player_score = font.render("Score:", True, (255, 235, 193))
 
 
 rolling_aud = pygame.mixer.Sound('audio/roll_aud.mp3')
@@ -83,7 +85,7 @@ class Dice:
 
 class Button():
 
-    def __init__(self, x, y, width, height, text='', color=(0, 255, 0), highlight_color=(255, 0, 0), function=None, param=None):
+    def __init__(self, x, y, width, height, text='', color=(75, 38, 5), highlight_color=(103, 63, 30), function=None, param=None):
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.highlight_color = highlight_color
@@ -148,11 +150,18 @@ if __name__ == "__main__":
 
     dice_list = [die1, die2, die3, die4, die5, die6]
 
-    button_width = 100
-    button_height = 50
-    button_x = 70
-    button_y = 40
-    roll_button = Button(button_x, button_y, button_width, button_height, text='Roll', function=rolling_animation_button, param=dice_list)
+    roll_button_width = 120
+    roll_button_height = 80
+    roll_button_x = 150
+    roll_button_y = 400
+    roll_button = Button(roll_button_x, roll_button_y, roll_button_width, roll_button_height, text='Roll', function=rolling_animation_button, param=dice_list)
+
+    pass_button_width = 120
+    pass_button_height = 80
+    pass_button_x = 400
+    pass_button_y = 400
+    pass_button = Button(pass_button_x, pass_button_y, pass_button_width, pass_button_height, text='Pass', function=lambda: print('pass button pressed'), param=None)
+
 
     while True:
         for event in pygame.event.get():
@@ -161,14 +170,17 @@ if __name__ == "__main__":
                 exit()
             else:
                 roll_button.handle_event(event)
+                pass_button.handle_event(event)
 
         screen.blit(background_image, (0, 0))
-        screen.blit(roll_message, (100, 425))
+        screen.blit(player_name, (50, 50))
+        screen.blit(player_score, (475, 50))
 
         for die in dice_list:
             die.roll_animation(screen)
 
         roll_button.draw(screen)
+        pass_button.draw(screen)
 
         pygame.display.update()
         clock.tick(13)
