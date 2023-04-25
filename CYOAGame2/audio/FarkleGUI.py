@@ -5,82 +5,126 @@ import random
 pygame.init()
 clock = pygame.time.Clock()
 
-screen = pygame.display.set_mode((600, 400))
+screen = pygame.display.set_mode((700, 500))
 pygame.display.set_caption("Dice Roll Stimulator")
 
 background_image = pygame.image.load('graphics/background2.png')
 font = pygame.font.Font('font/SunnyspellsRegular.otf', 50)
 roll_message = font.render("press SPACEBAR to start rolling", True, (255, 235, 193))
 
-dice_images = []
-dice_rolling_images = []
-
-# since there are 6 dice images
-for num in range(1, 7):
-    dice_image = pygame.image.load('graphics/dice/' + str(num) + '.png')
-    dice_images.append(dice_image)
-
-# since there are 8 rolling dice images
-for num in range(1, 9):
-    dice_rolling_image = pygame.image.load('graphics/animation/roll' + str(num) + '.png')
-    dice_rolling_images.append(dice_rolling_image)
 
 rolling_aud = pygame.mixer.Sound('audio/roll_aud.mp3')
 rolling_stop_aud = pygame.mixer.Sound('audio/roll_stop_aud.mp3')
 
 is_rolling = False
 rolling_images_counter = 0
-dice_num_image = dice_images[0]
-
-first_sound = True
-
-
-while True:
-
-    die1 = Dice(20, 150)
-    die2 = Dice(250, 150)
-    die3 = Dice(450, 150)
-
-    dice_list = [die1, die2, die3]
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-    screen.blit(background_image, (0, 0))
-    screen.blit(roll_message, (50, 300))
+#dice_num_image = dice_images[0]
+first = True
 
 
-    key = pygame.key.get_pressed()
-    if key[pygame.K_SPACE] and is_rolling is False:
-        is_rolling = True
-        rolling_aud.play()
+class Dice:
+    def __init__(self, x, y):
+        self.faces = [1, 2, 3, 4, 5, 6]
+        self.is_rolling = False
+        self.rolling_images_counter = 0
+        self.dice_images = []
+        self.dice_rolling_images = []
+        self.load_dice_images()
+        self.load_rolling_images()
+        self.dice_num_image = self.dice_images[0]
+        self.x = x
+        self.y = y
+        self.animate = True
+        
 
-        rand_num = random.randint(0, 5)
-        dice_num_image = dice_images[rand_num]
-        screen.blit(dice_rolling_images[rolling_images_counter], (250, 150))
-        rolling_images_counter += 1
-        first_sound = True
+    def roll(self):
+        result = random.choice(self.faces)
+        return result
 
+    def load_dice_images(self):
+        for num in range(1, 7):
+            dice_image = pygame.image.load('graphics/dice/' + str(num) + '.png')
+            self.dice_images.append(dice_image)
 
-        # start rolling and calculate dice num
-    else:
-        if is_rolling:
-            # showing rolling animation images
-            screen.blit(dice_rolling_images[rolling_images_counter], (250, 150))
-            rolling_images_counter += 1
-            if rolling_images_counter >= 8:
-                is_rolling = False
-                rolling_images_counter = 0
+    def load_rolling_images(self):
+        for num in range(1, 9):
+            dice_rolling_image = pygame.image.load('graphics/animation/roll' + str(num) + '.png')
+            self.dice_rolling_images.append(dice_rolling_image)
 
+    def roll_animation(self, screen):
+        global first
+        key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE] and self.is_rolling is False:
+            self.is_rolling = True
+            rolling_aud.play()
+            rand_num = random.randint(0, 5)
+            self.dice_num_image = self.dice_images[rand_num]
+            screen.blit(self.dice_rolling_images[self.rolling_images_counter], (self.x, self.y))
+            self.rolling_images_counter += 1
+            first = True
 
+            # start rolling and calculate dice num
         else:
-            screen.blit(dice_num_image, (250, 150))
-            if first_sound:
-                rolling_stop_aud.play()
-                first_sound = False
-            # show the dice which contains a number
+            if self.is_rolling:
+                # showing rolling animation images
+                screen.blit(self.dice_rolling_images[self.rolling_images_counter], (self.x, self.y))
+                self.rolling_images_counter += 1
+                if self.rolling_images_counter >= 8:
+                    self.is_rolling = False
+                    self.rolling_images_counter = 0
 
-    pygame.display.update()
-    clock.tick(13)
+            else:
+                screen.blit(self.dice_num_image, (self.x, self.y))
+                if first:
+                    rolling_stop_aud.play()
+                    first = False
+                # show the dice which contains a number
 
+class Button():
+
+    def __init__(self, text, x, y, color, action):
+        self.text = text
+        self.x = x
+        self.y = y
+        self.color = color
+        self.action = action
+
+    def create_button(self):
+        print("inside the button function")
+
+if __name__ == "__main__":
+
+    die1 = Dice(70, 135)
+    die2 = Dice(285, 135)
+    die3 = Dice(500, 135)
+    die4 = Dice(70, 270)
+    die5 = Dice(285, 270)
+    die6 = Dice(500, 270)
+
+    dice_list = [die1, die2, die3, die4, die5, die6]
+
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+        
+
+        key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE]:
+            rolling_aud.play()
+            for die in dice_list:
+                die.is_rolling = True
+                die_roll_index = die.roll() - 1#random.randint(0, 5)
+                die.dice_num_image = die.dice_images[die_roll_index]
+
+        screen.blit(background_image, (0, 0))
+        screen.blit(roll_message, (100, 425))
+
+        for die in dice_list:
+            die.roll_animation(screen)
+
+
+        pygame.display.update()
+        clock.tick(13)
